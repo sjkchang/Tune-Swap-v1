@@ -2,7 +2,6 @@ from Flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.fields.simple import SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError
-from ..models.sample_model import SampleModel
 
 
 class SampleForm(FlaskForm):
