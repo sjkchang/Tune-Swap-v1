@@ -1,7 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 db = SQLAlchemy()
+login_manager = LoginManager()
 
 
 def create_app(testing):
@@ -14,7 +16,7 @@ def create_app(testing):
     db.init_app(app)
 
     with app.app_context():
-        from .views import sample_route
-        from .models import sample_model
+        from .views import user_managment, spotify_auth
+        from .models import user_model
 
         return app
