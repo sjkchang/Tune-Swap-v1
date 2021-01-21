@@ -5,6 +5,7 @@
     {% if current_user.username %}
     <p>Username: {{ current_user.username }}</p>
     <p>Email: {{ current_user.email }}</p>
+    <p>Code: {{ current_user.spotify_code }}</p>
     {% else %}
     <p>No current user</p>
     {% endif %}
