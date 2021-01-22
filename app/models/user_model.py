@@ -20,6 +20,8 @@ class User(db.Model, UserMixin):
 
     spotify_code = db.Column(db.String(500))
 
+    spotify_token = db.relationship("SpotifyAccessToken", backref="User", lazy=True)
+
     def __str__(self):
         return f"Username: {self.username}"
 
@@ -32,3 +34,5 @@ class User(db.Model, UserMixin):
         user = User(username=username, email=email, password_hash=password_hash)
         db.session.add(user)
         db.session.commit()
+
+        return user

@@ -9,10 +9,11 @@
 
 <body>
     <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('logout') }}">logout</a>
     <a href="{{ url_for('register') }}">register</a>
     <a href="{{ url_for('authenticate') }}">auth</a>
+    <a href="{{ url_for('refresh') }}">refresh</a>
     <a href="{{ url_for('home') }}">home</a>
-    <a href="{{ url_for('logout') }}">logout</a>
 
     {% block content %}
     {% endblock content %}

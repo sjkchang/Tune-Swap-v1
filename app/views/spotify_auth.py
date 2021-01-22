@@ -42,7 +42,7 @@ def callback():
 
 
 @app.route("/spotify/auth/refresh")
-def requestTokens():
+def refresh():
     URL = "https://accounts.spotify.com/api/token"
 
     headers = {
@@ -64,5 +64,6 @@ def requestTokens():
         data["scope"],
         data["expires_in"],
         data["refresh_token"],
+        current_user,
     )
-    return f"<h1>{str(data)}</h1>"
+    return redirect(url_for("home"))
