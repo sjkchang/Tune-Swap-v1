@@ -12,8 +12,6 @@ class SpotifyAccessToken(db.Model):
     expires_in = db.Column(db.Integer, nullable=False)
     refresh_token = db.Column(db.String(128), nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-
     def __str__(self):
         return f"Access_token: {self.access_token}, scope: {self.scope}, refresh_token: {self.refresh_token}"
 
@@ -21,14 +19,13 @@ class SpotifyAccessToken(db.Model):
         return f"Access_token: {self.access_token}, scope: {self.scope}, refresh_token: {self.refresh_token}"
 
     @classmethod
-    def create(cls, access_token, token_type, scope, expires_in, refresh_token, user):
+    def create(cls, access_token, token_type, scope, expires_in, refresh_token):
         token = SpotifyAccessToken(
             access_token=access_token,
             token_type=token_type,
             scope=scope,
             expires_in=expires_in,
             refresh_token=refresh_token,
-            user_id=user.id,
         )
         db.session.add(token)
         db.session.commit()
