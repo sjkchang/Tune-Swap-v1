@@ -28,13 +28,38 @@ def getCurrentUser(access_token):
     return response
 
 
-def get_playlists(access_token, limit):
+def get_playlists(access_token):
     url = "https://api.spotify.com/v1/me/playlists"
     headers = {
         "Authorization": "Bearer " + access_token,
     }
 
-    params = {"limit": f"{limit}"}
+    response = requests.get(url, headers=headers)
+    response = response.json()
+
+    items = response["items"]
+    playlists = []
+    for item in items:
+        playlist = {
+            "id": item["id"],
+            "name": item["name"],
+            "description": "Description",
+            "uri": item["uri"],
+            "public": item["public"],
+            "platform": "Spotify",
+        }
+        playlists.append(playlist)
+
+    return playlists
+
+
+def get_playlist(access_token, playlist_id):
+    print(playlist_id)
+    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+    headers = {
+        "Authorization": "Bearer " + access_token,
+    }
+    params = {"fields": "name,description,uri"}
 
     response = requests.get(url, headers=headers)
     response = response.json()

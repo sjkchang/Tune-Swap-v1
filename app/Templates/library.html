@@ -14,7 +14,7 @@
             {% for playlist in playlists %}
             <tr>
                 <th scope="row">1</th>
-                <td><a href="">{{ playlist["name"] }}</a></td>
+                <td><a href="{{ url_for('playlist', id=playlist['id']) }}">{{ playlist["name"] }}</a></td>
                 <td>{{ playlist["public"] }}</td>
                 <td>{{ playlist["platform"] }}</td>
             </tr>

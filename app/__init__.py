@@ -19,7 +19,7 @@ def create_app(testing):
     login_manager.init_app(app)
 
     with app.app_context():
-        from .views import user_management, spotify
+        from .views import user_management, spotify, library
         from .models import user_model
 
         # db.drop_all()

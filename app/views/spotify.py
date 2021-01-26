@@ -41,7 +41,7 @@ def callback():
     code = request.args.get("code")
     db.session.commit()
     print("running")
-    return redirect(url_for("home"))
+    return redirect(url_for("refresh"))
 
 
 @app.route("/spotify/auth/refresh")
