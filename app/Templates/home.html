@@ -2,13 +2,11 @@
 {% block content %}
 <div class="col-md-12">
     <h1>Welcome to Tune Swap</h1>
-    {% if current_user.username %}
-    <p>Username: {{ current_user.username }}</p>
-    <p>Email: {{ current_user.email }}</p>
-    <p>Code: {{ current_user.spotify_code }}</p>
-    <p>Token: {{ current_user.spotify_token }}</p>
-    {% else %}
-    <p>No current user</p>
-    {% endif %}
+    <div>
+        <p>
+            Code:: {{code}}
+            Access Token: {{access_token}}
+        </p>
+    </div>
 </div>
 {% endblock content %}

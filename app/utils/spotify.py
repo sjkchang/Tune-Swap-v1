@@ -2,7 +2,7 @@ import requests
 import json
 
 
-def getCurrentUserId(access_token):
+def get_current_user_simplified(access_token):
     url = "https://api.spotify.com/v1/me"
 
     headers = {
@@ -15,7 +15,7 @@ def getCurrentUserId(access_token):
     return id
 
 
-def getCurrentUser(access_token):
+def get_current_user(access_token):
     url = "https://api.spotify.com/v1/me"
 
     headers = {
@@ -86,7 +86,7 @@ def get_uri_for_track(access_token, title, artist, album):
 
 
 def create_playlist(access_token, name, description="", is_public=True):
-    user_id = getCurrentUserId(access_token)
+    user_id = get_current_user_simplified(access_token)
     url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
 
     headers = {
