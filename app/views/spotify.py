@@ -30,14 +30,8 @@ def authenticate():
 
 @app.route("/spotify/auth/callback")
 def callback():
-    print(request.args.get("code"))
-    session["spotify_code"] = request.args.get("code")
-    print(session["spotify_code"])
-    return redirect(url_for("get_token"))
+    session["code"] = request.args.get("code")
 
-
-@app.route("/spotify/auth/token")
-def get_token():
     URL = "https://accounts.spotify.com/api/token"
 
     headers = {
@@ -46,15 +40,15 @@ def get_token():
 
     body_params = {
         "grant_type": "authorization_code",
-        "code": session["spotify_code"],
+        "code": session["code"],
         "redirect_uri": "http://127.0.0.1:5000/spotify/auth/callback",
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
     }
-    response = requests.post(URL, data=body_params)
-    data = response.json()
-    print(data)
-    session["spotify_token"] = data
+    data = requests.post(URL, data=body_params).json()
+
+    session["access_token"] = data
+    session["refresh_token"] = data["refresh_token"]
 
     return redirect(url_for("home"))
 
@@ -65,7 +59,7 @@ def refresh():
 
     body_params = {
         "grant_type": "refresh_token",
-        "refresh_token": session["spotify_token"]["refresh_token"],
+        "refresh_token": session["refresh_token"],
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
     }
@@ -74,7 +68,9 @@ def refresh():
     response = response.json()
     print(response)
 
-    session["spotify_token"] = response
+    session["access_token"] = response
+
+    return redirect(url_for("home"))
 
 
 ### API Calls

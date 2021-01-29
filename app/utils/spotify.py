@@ -55,7 +55,6 @@ def get_playlists_simplified(access_token):
 
 
 def get_playlist(access_token, playlist_id):
-    print(playlist_id)
     url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
     headers = {
         "Authorization": "Bearer " + access_token,
