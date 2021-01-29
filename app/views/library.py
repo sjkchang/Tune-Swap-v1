@@ -19,7 +19,7 @@ BASE_URL = "https://accounts.spotify.com/authorize"
 def library():
     access_token = session["spotify_token"]["access_token"]
 
-    playlists = spotify.get_playlists(access_token)
+    playlists = spotify.get_playlists_simplified(access_token)
 
     return render_template("library.html", playlists=playlists)
 
@@ -27,6 +27,14 @@ def library():
 @app.route("/user/library/playlist/<id>")
 def playlist(id):
     access_token = session["spotify_token"]["access_token"]
-    tracks = spotify.get_playlist(access_token, id)
+    tracks = spotify.get_playlist(access_token, id)["items"]
+    return render_template("playlist.html", tracks=tracks)
 
-    return tracks
+
+@app.route("/user/top/tracks/<term>")
+def top_tracks(term):
+    access_token = session["spotify_token"]["access_token"]
+
+    tracks = spotify.get_top_tracks(access_token, term)
+
+    return render_template("playlist.html", tracks=tracks)

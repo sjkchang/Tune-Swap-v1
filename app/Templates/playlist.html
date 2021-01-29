@@ -6,17 +6,17 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Privacy</th>
-                <th scope="col">Platform</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Album</th>
             </tr>
         </thead>
         <tbody>
-            {% for playlist in playlists %}
+            {% for track in tracks %}
             <tr>
-                <th scope="row">{{ loop.index0 + 1 }}</th>
-                <td><a href="{{ url_for('playlist', id=playlist['id']) }}">{{ playlist["name"] }}</a></td>
-                <td>{{ playlist["public"] }}</td>
-                <td>{{ playlist["platform"] }}</td>
+                <th scope="row">{{ loop.index0 +1 }}</th>
+                <td><a href="{{ track['track']['href'] }}">{{ track["track"]["name"] }}</a></td>
+                <td>{{ track["track"]["artists"]["name"] }}</td>
+                <td>{{ track["track"]["album"]["name"] }}</td>
             </tr>
             {% endfor %}
         </tbody>

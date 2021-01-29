@@ -9,8 +9,7 @@ def get_current_user_simplified(access_token):
         "Authorization": "Bearer " + access_token,
     }
 
-    response = requests.get(url, headers=headers)
-    response = response.json()
+    response = requests.get(url, headers=headers).json()
     id = response["id"]
     return id
 
@@ -22,8 +21,7 @@ def get_current_user(access_token):
         "Authorization": "Bearer " + access_token,
     }
 
-    response = requests.get(url, headers=headers)
-    response = response.json()
+    response = requests.get(url, headers=headers).json()
 
     return response
 
@@ -34,9 +32,13 @@ def get_playlists(access_token):
         "Authorization": "Bearer " + access_token,
     }
 
-    response = requests.get(url, headers=headers)
-    response = response.json()
+    response = requests.get(url, headers=headers).json()
 
+    return response
+
+
+def get_playlists_simplified(access_token):
+    response = get_playlists(access_token)
     items = response["items"]
     playlists = []
     for item in items:
@@ -49,7 +51,6 @@ def get_playlists(access_token):
             "platform": "Spotify",
         }
         playlists.append(playlist)
-
     return playlists
 
 
@@ -59,10 +60,8 @@ def get_playlist(access_token, playlist_id):
     headers = {
         "Authorization": "Bearer " + access_token,
     }
-    params = {"fields": "name,description,uri"}
 
-    response = requests.get(url, headers=headers)
-    response = response.json()
+    response = requests.get(url, headers=headers).json()
 
     return response
 
@@ -79,8 +78,7 @@ def get_uri_for_track(access_token, title, artist, album):
         "limit": 2,
     }
 
-    response = requests.get(url, headers=headers, params=params)
-    response = response.json()
+    response = requests.get(url, headers=headers, params=params).json()
 
     return response
 
@@ -96,9 +94,7 @@ def create_playlist(access_token, name, description="", is_public=True):
 
     body_params = {"name": name, "public": is_public, "description": description}
 
-    response = requests.post(url, data=json.dumps(body_params), headers=headers)
-    print(response.text)
-    response = response.json()
+    response = requests.post(url, data=json.dumps(body_params), headers=headers).json()
 
     return response
 
@@ -113,6 +109,32 @@ def add_track_to_playlist(access_token, playlist_id, track_uri):
 
     params = {"uris": [track_uri]}
 
-    response = requests.post(url, headers=headers, data=json.dumps(params))
-    response = response.json()
+    response = requests.post(url, headers=headers, data=json.dumps(params)).json()
     return response
+
+
+def get_top_tracks(access_token, time_range):
+    url = "https://api.spotify.com/v1/me/top/tracks"
+
+    headers = {
+        "Authorization": "Bearer " + access_token,
+        "Content-Type": "application/json",
+    }
+
+    params = {
+        "time_range": time_range,
+        "limit": 50,
+    }
+
+    response = requests.get(url, headers=headers, params=params).json()
+
+    return response
+
+
+def get_top_tracks_simplified(access_token, time_range):
+    response = get_top_tracks(access_token, time_range)
+    tracks = []
+    for item in response["items"]:
+        tracks.append(item)
+
+    return tracks

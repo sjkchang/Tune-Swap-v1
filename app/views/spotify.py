@@ -23,7 +23,7 @@ def authenticate():
         + f"?client_id={CLIENT_ID}"
         + "&response_type=code"
         + f"&redirect_uri={REDIRECT_URI}"
-        + "&scope=user-read-private%20user-read-email%20user-library-read%20user-library-modify%20playlist-modify-public%20playlist-modify-private%20playlist-read-private"
+        + "&scope=user-read-private%20user-read-email%20user-library-read%20user-library-modify%20playlist-modify-public%20playlist-modify-private%20playlist-read-private%20user-read-recently-played%20user-top-read%20user-read-playback-position"
     )
     return redirect(URL)
 
