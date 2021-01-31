@@ -137,3 +137,14 @@ def get_top_tracks_simplified(access_token, time_range):
         tracks.append(item)
 
     return tracks
+
+
+def get_track(access_token, id):
+    url = f"https://api.spotify.com/v1/tracks/{id}"
+    headers = {
+        "Authorization": "Bearer " + access_token,
+        "Content-Type": "application/json",
+    }
+
+    track = requests.get(url, headers=headers).json()
+    return track

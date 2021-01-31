@@ -31,6 +31,13 @@ def playlist(id):
     return render_template("playlist.html", tracks=tracks)
 
 
+@app.route("/user/library/track/<id>")
+def track(id):
+    access_token = session["access_token"]["access_token"]
+    track = spotify.get_track(access_token, id)
+    return track
+
+
 @app.route("/user/top/tracks/<term>")
 def top_tracks(term):
     access_token = session["access_token"]["access_token"]
