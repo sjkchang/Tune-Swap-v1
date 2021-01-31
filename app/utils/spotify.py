@@ -2,6 +2,89 @@ import requests
 import json
 
 
+class Spotify(object):
+    def __init__(self, access_token):
+        self.prefix_url = "https://api.spotify.com/v1/"
+        self.header = {"Authorization": f"Bearer {access_token}"}
+        self.access_token = access_token
+
+    def _api_request(self, http_method, url, payload, params):
+        headers = self.header
+        headers["Content-Type"] = "application/json"
+        if not url.startswith("http"):
+            url = self.prefix_url + url
+        if http_method == "GET":
+            return requests.get(url, headers=headers, data=payload, params=params)
+        return None
+
+    def _get(self, url, payload=None, **kwargs):
+        return self._api_request("GET", url, payload, kwargs)
+
+    def _get_id(self, type, id):
+        """Returns the id of a spotify api object given a id, uri or url
+
+        Args:
+            type ([String]): The type of the spotify object whose id we are fetching
+            id ([String]): The id, uri or url of the spotify api object
+
+        Returns:
+            [String]: The id of the spotify api object
+        """
+
+        # If the given id is a uri, return the id which is the last section of the uri
+        if self._is_uri(id):
+            return id.split(":")[2]
+        # Otherwise if it is a url return the content following the last /
+        # elif self.is_url():
+        # return id.split("/")[-1]
+        # If the passed id is not a url or a uri, it is a id, so just return it
+        return id
+
+    def _get_uri(self, type, id):
+        """Returns the uri of a spotify api object, given a id, uri, or url
+
+        Args:
+            type (String): The type of the spotify api object whose uri we are fetching
+            id (String): The id, uri, or url of the spotify api object
+
+        Returns:
+            [String]: The uri of the spotify api object
+        """
+        if self.is_uri(id):
+            return f"spotify:{type}:{id}"
+        else:
+            return f"spotify:{type}:{self._get_id(type, id)}"
+
+    def _is_uri(self, uri):
+        """Returns True if the uri parameter is a uri. A valid uri is a string with three parts
+        the word spotify, the type of the object, and the id, all seperated with :
+
+        Args:
+            uri (String): The String we are determining to be a uri or not
+
+        Returns:
+            [Boolean]: True if the param uri is a uri,
+            False if the param uri is not a uri
+        """
+        return uri.startswith("spotify:") and len(uri.split(":")) == 3
+
+    def get_track(self, id):
+        """returns a track given the tracks id, uri, or url
+
+        Args:
+            id: a tracks id, uri or url
+        """
+        track_id = self._get_id("track", id)
+        return self._get(f"tracks/{id}")
+
+    def get_current_user(self):
+        return self._get("me")
+
+    def get_user(self, id):
+        user_id = self._get_id("user", id)
+        return self._get(f"users/{id}")
+
+
 def get_current_user_simplified(access_token):
     url = "https://api.spotify.com/v1/me"
 
