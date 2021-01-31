@@ -14,7 +14,7 @@
             {% for track in tracks %}
             <tr>
                 <th scope="row">{{ loop.index0 +1 }}</th>
-                <td><a href="{{ track['track']['href'] }}">{{ track["track"]["name"] }}</a></td>
+                <td><a href="{{ url_for('track', id=track['track']['id']) }}">{{ track["track"]["name"] }}</a></td>
                 <td>{{ track["track"]["artists"]["name"] }}</td>
                 <td>{{ track["track"]["album"]["name"] }}</td>
             </tr>

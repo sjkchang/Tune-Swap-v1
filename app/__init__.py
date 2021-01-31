@@ -9,6 +9,6 @@ def create_app(testing):
         app.config.from_object("config.TestConfig")
 
     with app.app_context():
-        from .views import library, spotify, nav
+        from .views import library, auth, nav
 
         return app
