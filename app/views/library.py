@@ -34,14 +34,14 @@ def playlist(id):
 @app.route("/user/library/track/<id>")
 def track(id):
     access_token = session["access_token"]["access_token"]
-    track = spotify.get_track(access_token, id)
+    sp = spotify.Spotify(access_token)
+    track = sp.get_track(id).json()
     return track
 
 
 @app.route("/user/top/tracks/<term>")
 def top_tracks(term):
     access_token = session["access_token"]["access_token"]
-
     tracks = spotify.get_top_tracks(access_token, term)
 
     return render_template("playlist.html", tracks=tracks)
