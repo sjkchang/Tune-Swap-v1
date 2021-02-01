@@ -15,8 +15,13 @@ def home():
         code = session["code"]
     if session.get("access_token"):
         access_token = session["access_token"]
-        me = spotify.Spotify(access_token["access_token"]).get_current_user()
-        print(me.json())
+        me = spotify.Spotify(access_token).get_current_user()
         me = me.json()
 
     return render_template("home.html", code=code, access_token=access_token, me=me)
+
+
+@app.route("/account")
+def account():
+    current_user = spotify.Spotify(session["access_token"]).get_current_user().json()
+    return render_template("account.html", current_user=current_user)
