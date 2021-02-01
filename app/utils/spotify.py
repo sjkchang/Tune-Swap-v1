@@ -14,6 +14,24 @@ class Spotify(object):
         self.header = {"Authorization": f"Bearer {access_token['access_token']}"}
         self.access_token = access_token
 
+    def set_access_token(self, access_token):
+        self.header = {"Authorization": f"Bearer {access_token['access_token']}"}
+        self.access_token = access_token
+
+        URL = "https://accounts.spotify.com/api/token"
+        refresh_token = self.access_token["refresh_token"]
+        body_params = {
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token,
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+        }
+
+        response = requests.post(URL, data=body_params).json()
+        self.access_token = response
+        self.access_token["refresh_token"] = refresh_token
+        return self.access_token
+
     def _api_request(self, http_method, url, payload, params):
         headers = self.header
         headers["Content-Type"] = "application/json"
@@ -21,10 +39,15 @@ class Spotify(object):
             url = self.prefix_url + url
         if http_method == "GET":
             return requests.get(url, headers=headers, data=payload, params=params)
+        if http_method == "POST":
+            return requests.post(url, headers=headers, data=payload, params=params)
         return None
 
     def _get(self, url, payload=None, **kwargs):
         return self._api_request("GET", url, payload, kwargs)
+
+    def _post(self, url, payload=None, **kwargs):
+        return self._api_request("POST", url, payload, kwargs)
 
     def _get_id(self, type, id):
         """Returns the id of a spotify api object given a id, uri or url
@@ -95,49 +118,24 @@ class Spotify(object):
     def get_top_tracks(self, limit=50, time_range="short_term"):
         return self._get("me/top/tracks", limit=limit, time_range=time_range)
 
+    def create_playlist(
+        self, user_id, name, public=True, collaborative=False, description=None
+    ):
+        return self._post(
+            f"users/{user_id}/playlists",
+            name=name,
+            public=public,
+            collaborative=collaborative,
+            description=description,
+        )
 
-def get_uri_for_track(access_token, title, artist, album):
-    url = "https://api.spotify.com/v1/search"
+    def add_track_to_playlist(self, playlist_id, tracks):
+        return self._post(f"playlists/{playlist_id}/tracks", uris=tracks)
 
-    headers = {
-        "Authorization": "Bearer " + access_token,
-    }
-    params = {
-        "q": f"track: {title} artist: {artist} album:{album}",
-        "type": "track",
-        "limit": 2,
-    }
-
-    response = requests.get(url, headers=headers, params=params).json()
-
-    return response
-
-
-def create_playlist(access_token, name, description="", is_public=True):
-    user_id = get_current_user_simplified(access_token)
-    url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
-
-    headers = {
-        "Authorization": "Bearer " + access_token,
-        "Content-Type": "application/json",
-    }
-
-    body_params = {"name": name, "public": is_public, "description": description}
-
-    response = requests.post(url, data=json.dumps(body_params), headers=headers).json()
-
-    return response
-
-
-def add_track_to_playlist(access_token, playlist_id, track_uri):
-    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-
-    headers = {
-        "Authorization": "Bearer " + access_token,
-        "Content-Type": "application/json",
-    }
-
-    params = {"uris": [track_uri]}
-
-    response = requests.post(url, headers=headers, data=json.dumps(params)).json()
-    return response
+    def get_uri_for_track(self, title, artist=None, album=None):
+        return self._get(
+            "search",
+            q=f"track: {title} artist: {artist} album:{album}",
+            type="track",
+            limit=2,
+        )
