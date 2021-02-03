@@ -6,6 +6,11 @@ import json
 import requests
 
 
+@app.route("/landing")
+def landing():
+    return render_template("landing.html")
+
+
 @app.route("/")
 def home():
     code = "N/a"
