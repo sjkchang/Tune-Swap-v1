@@ -1,8 +1,50 @@
 h1 {color:#FFEEFF;}
 
 body {
-    background-color:#13232E;
-    color:#FFEEFF;
+    background-color:#1f2833;
+    color:#66fcf1;
+    font-family: "Karla", Arial, sans-serif;
+    border-color: #1f2833;
+
 }
 
-  
+a {
+    color:#66fcf1;
+}
+
+a:hover{
+    color:#45a29e;
+}
+
+.table{
+    background-color: rgba(0, 0, 0, 0);
+    color:#66fcf1;
+
+}
+
+th {
+    color: #45a29e;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.borderless td, .borderless th {
+    border: none;
+}
+
+.color{
+    color:#264653;
+    color:#2a9d8f;
+    color:#e9c46a;
+    color:#f4a261;
+    color:#e76f51;
+}
+
+.color{
+    color: #0b0c10;
+    color: #1f2833;
+    color: #c5c6c7;
+    color: #66fcf1;
+    color: #45a29e;
+
+}

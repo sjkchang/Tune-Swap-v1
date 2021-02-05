@@ -56,6 +56,7 @@ def playlist(id):
     for item in items:
         tracks.append(item["track"])
 
+    # return str(tracks)
     return render_template("playlist.html", tracks=tracks)
 
 
