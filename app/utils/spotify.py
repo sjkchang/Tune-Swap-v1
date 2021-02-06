@@ -3,6 +3,8 @@ import json
 from dotenv import load_dotenv
 import os
 
+from requests.api import head
+
 load_dotenv()
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
@@ -40,6 +42,9 @@ class Spotify(object):
         if http_method == "GET":
             return requests.get(url, headers=headers, data=payload, params=params)
         if http_method == "POST":
+            print(f"Headers{headers}")
+            print(f"payload:{payload}")
+            print(f"params: {params}")
             return requests.post(url, headers=headers, data=payload, params=params)
         return None
 
@@ -108,6 +113,9 @@ class Spotify(object):
         user_id = self._get_id("user", id)
         return self._get(f"users/{user_id}")
 
+    def get_current_user(self):
+        return self._get("me")
+
     def get_playlist_items(self, id):
         playlist_id = self._get_id("playlist", id)
         return self._get(f"playlists/{playlist_id}/tracks")
@@ -121,13 +129,14 @@ class Spotify(object):
     def create_playlist(
         self, user_id, name, public=True, collaborative=False, description=None
     ):
-        return self._post(
-            f"users/{user_id}/playlists",
-            name=name,
-            public=public,
-            collaborative=collaborative,
-            description=description,
-        )
+        payload = {
+            "name": name,
+            "public": public,
+            "collaborative": collaborative,
+            "description": description,
+        }
+        payload = json.dumps(payload)
+        return self._post(f"users/{user_id}/playlists", payload=payload)
 
     def add_track_to_playlist(self, playlist_id, tracks):
         return self._post(f"playlists/{playlist_id}/tracks", uris=tracks)

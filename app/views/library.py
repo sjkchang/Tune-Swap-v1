@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from ..utils import spotify
 from ..utils.spotify import Spotify
 
+from ..forms.create_playlist import CreatePlaylistForm
+
 load_dotenv()
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
@@ -73,3 +75,17 @@ def top_tracks(term):
     sp = Spotify(session["access_token"])
     tracks = sp.get_top_tracks(limit=50, time_range=term).json()["items"]
     return render_template("playlist.html", tracks=tracks)
+
+
+@app.route("/user/create-playlist", methods=["GET", "POST"])
+def create_playlist():
+    sp = Spotify(session["access_token"])
+    form = CreatePlaylistForm()
+    if form.validate_on_submit():
+        playlist = sp.create_playlist(
+            sp.get_current_user().json()["id"],
+            form.name.data,
+            description=form.description.data,
+        )
+        return playlist.json()
+    return render_template("create_playlist.html", form=form)
