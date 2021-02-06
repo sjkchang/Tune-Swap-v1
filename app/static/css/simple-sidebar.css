@@ -23,7 +23,7 @@
   min-height: 100vh;
   margin-left: 0;
   background-color: #0b0c10;
-  position: sticky;
+  position: fixed;
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -43,7 +43,9 @@
 
 #page-content-wrapper {
   min-width: 0;
-  width: 100%;
+  position: relative;
+  width: 85%;
+  left:15rem;
 }
 
 
