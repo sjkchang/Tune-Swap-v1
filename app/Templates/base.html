@@ -29,14 +29,16 @@
 
         <!-- Sidebar -->
         <div class="" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom">Spotify Profile+</div>
+            <div class="sidebar-heading border-bottom">Spotify+</div>
             <div class="list-group list-group-flush">
                 <a href="{{ url_for('home') }}" class="list-group-item list-group-item-action">Dashboard</a>
                 <a href="{{ url_for('library') }}" class="list-group-item list-group-item-action">Playlists</a>
                 <a href="{{ url_for('top_tracks', term='short_term') }}"
                     class="list-group-item list-group-item-action">Top Tracks</a>
-                <a href="#" class="list-group-item list-group-item-action">Top Artists</a>
-                <a href="#" class="list-group-item list-group-item-action">Status</a>
+                <a href="{{ url_for('top_artists', term='short_term') }}"
+                    class="list-group-item list-group-item-action">Top Artists</a>
+                <a href="{{ url_for('create_playlist') }}" class="list-group-item list-group-item-action">Generate
+                    Playlist</a>
                 <a href="{{ url_for('account') }}" class="list-group-item list-group-item-action">Profile</a>
             </div>
         </div>

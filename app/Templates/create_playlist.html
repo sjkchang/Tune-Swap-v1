@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="col-md-12">
+    <legend class="border-bottom mb-4 text-navy">Generate Playlist</legend>
+    <div>
+        Generates a playlist with similar attributes to the currently selected seed songs
+    </div>
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4 text-navy">Create Playlist</legend>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     {{ form.name(placeholder="Name", class="form-control form-control-sm") }}

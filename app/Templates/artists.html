@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="table-responsive">
+    <table class="table borderless table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Artist</th>
+                <th scope="col">Followers</th>
+                <th scope="col">Popularity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for artist in artists %}
+            <tr>
+                <td><a href="#">{{ artist["name"] }}</a></td>
+                <td>{{ artist["followers"]["total"] }}</td>
+                <td>{{ artist["popularity"] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

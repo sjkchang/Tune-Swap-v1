@@ -77,6 +77,13 @@ def top_tracks(term):
     return render_template("playlist.html", tracks=tracks)
 
 
+@app.route("/user/top/artists/<term>")
+def top_artists(term):
+    sp = Spotify(session["access_token"])
+    artists = sp.get_top_artists(limit=50, time_range=term).json()["items"]
+    return render_template("artists.html", artists=artists)
+
+
 @app.route("/user/create-playlist", methods=["GET", "POST"])
 def create_playlist():
     sp = Spotify(session["access_token"])

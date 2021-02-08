@@ -126,6 +126,9 @@ class Spotify(object):
     def get_top_tracks(self, limit=50, time_range="short_term"):
         return self._get("me/top/tracks", limit=limit, time_range=time_range)
 
+    def get_top_artists(self, limit=50, time_range="short_term"):
+        return self._get("me/top/artists", limit=limit, time_range=time_range)
+
     def create_playlist(
         self, user_id, name, public=True, collaborative=False, description=None
     ):
