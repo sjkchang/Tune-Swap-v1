@@ -3,6 +3,7 @@ from flask import redirect, request, url_for, session
 
 import os
 import requests
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 from ..utils import spotify
@@ -47,6 +48,7 @@ def callback():
 
     session["access_token"] = data
     session["refresh_token"] = data["refresh_token"]
+    session["expires_at"] = datetime.now() + timedelta(hours=1)
 
     return redirect(url_for("home"))
 

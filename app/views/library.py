@@ -2,6 +2,7 @@ from flask import current_app as app
 from flask import redirect, request, url_for, render_template, session
 
 import os
+from datetime import datetime, timedelta
 import requests
 from dotenv import load_dotenv
 
@@ -21,7 +22,7 @@ sp = None
 
 @app.before_request
 def refresh_token_create_spotify():
-    if session.get("refresh_token"):
+    if session.get("refresh_token") and (session["expires_at"] <= datetime.now()):
         URL = "https://accounts.spotify.com/api/token"
 
         body_params = {
@@ -35,6 +36,8 @@ def refresh_token_create_spotify():
 
         session["access_token"] = response
         session["access_token"]["refresh_token"] = session["refresh_token"]
+        session["expires_at"] = datetime.now() + timedelta(hours=1)
+        print(session["expires_at"])
 
 
 @app.route("/user/library")
