@@ -141,6 +141,9 @@ class Spotify(object):
         payload = json.dumps(payload)
         return self._post(f"users/{user_id}/playlists", payload=payload)
 
+    def get_recommended_genres(self):
+        return self._get("recommendations/available-genre-seeds")
+
     def add_track_to_playlist(self, playlist_id, tracks):
         return self._post(f"playlists/{playlist_id}/tracks", uris=tracks)
 

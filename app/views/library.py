@@ -37,7 +37,6 @@ def refresh_token_create_spotify():
         session["access_token"] = response
         session["access_token"]["refresh_token"] = session["refresh_token"]
         session["expires_at"] = datetime.now() + timedelta(hours=1)
-        print(session["expires_at"])
 
 
 @app.route("/user/library")
@@ -91,6 +90,8 @@ def top_artists(term):
 def create_playlist():
     sp = Spotify(session["access_token"])
     form = CreatePlaylistForm()
+    genres = sp.get_recommended_genres().json()["genres"]
+    form.genres.choices = genres
     if form.validate_on_submit():
         playlist = sp.create_playlist(
             sp.get_current_user().json()["id"],

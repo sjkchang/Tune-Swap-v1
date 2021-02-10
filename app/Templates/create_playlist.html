@@ -17,9 +17,13 @@
                 <div class="form-group col-md-4">
                     {{ form.description(placeholder="Description", class="form-control form-control-sm") }}
                 </div>
+                <div class="form-group col-md-2">{{ form.genres(class="form-control form-control-sm") }}</div>
             </div>
         </fieldset>
         {{ form.submit(class="btn btn-outline-dark") }}
     </form>
+    <div>
+        {{ genres }}
+    </div>
 </div>
 {% endblock content %}
