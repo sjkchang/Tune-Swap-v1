@@ -42,9 +42,6 @@ class Spotify(object):
         if http_method == "GET":
             return requests.get(url, headers=headers, data=payload, params=params)
         if http_method == "POST":
-            print(f"Headers{headers}")
-            print(f"payload:{payload}")
-            print(f"params: {params}")
             return requests.post(url, headers=headers, data=payload, params=params)
         return None
 
@@ -145,7 +142,9 @@ class Spotify(object):
         return self._get("recommendations/available-genre-seeds")
 
     def add_track_to_playlist(self, playlist_id, tracks):
-        return self._post(f"playlists/{playlist_id}/tracks", uris=tracks)
+        payload = {"uris": tracks}
+        payload = json.dumps(payload)
+        return self._post(f"playlists/{playlist_id}/tracks", payload=payload)
 
     def get_uri_for_track(self, title, artist=None, album=None):
         return self._get(
@@ -154,3 +153,29 @@ class Spotify(object):
             type="track",
             limit=2,
         )
+
+    def get_recommendations(
+        self,
+        seed_artist,
+        seed_genres,
+        seed_tracks,
+        limit=50,
+        min_popularity=None,
+        max_popularity=None,
+        min_tempo=None,
+        max_tempo=None,
+        target_tempo=None,
+        min_valence=None,
+        max_valence=None,
+        target_valence=None,
+    ):
+        return self._get(
+            "recommendations",
+            seed_artist=seed_artist,
+            seed_genres=seed_genres,
+            seed_tracks=seed_tracks,
+            limit=limit,
+        )
+
+    def get_artist_id(self, artist):
+        return self._get("search", q=f"name: {artist}", type="artist", limit=1).json()

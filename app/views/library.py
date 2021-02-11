@@ -93,10 +93,27 @@ def create_playlist():
     genres = sp.get_recommended_genres().json()["genres"]
     form.genres.choices = genres
     if form.validate_on_submit():
-        playlist = sp.create_playlist(
+        # Create New Playlist with User Input Data
+        playlist_id = sp.create_playlist(
             sp.get_current_user().json()["id"],
             form.name.data,
             description=form.description.data,
-        )
-        return playlist.json()
+        ).json()["id"]
+
+        # Get track recommendations from seeds
+        artist_id = "0kIk8TSdVhoGiOuqlsvY2f"
+        track_id = "3oUuRNgyIuiqVTWLCChp3s"
+        recommendations = sp.get_recommendations(
+            artist_id, form.genres.data, track_id, limit=50
+        ).json()["tracks"]
+
+        # Convert Recommendations into list of uris
+        tracks = []
+        for track in recommendations:
+            uri = track["uri"]
+            tracks.append(uri)
+
+        # Add tracks to the New Playlist
+        sp.add_track_to_playlist(playlist_id, tracks).json()
+        return redirect(url_for("playlist", id=playlist_id))
     return render_template("create_playlist.html", form=form)
