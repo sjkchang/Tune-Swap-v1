@@ -1,9 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
+{% if playlist %}
+<div>
+    <img src="{{ playlist['images'][0]['url'] }}">
+    <p>{{ playlist['name'] }}</p>
+    <p>Followers: {{ playlist['followers']['total'] }}</p>
+    <p>Owner: {{ playlist['owner']['id'] }}</p>
+    <p>Description: {{ playlist['description'] }}</p>
+    <p>Length: {{ playlist['tracks']['total'] }}</p>
+</div>
+{% endif %}
 <div class="table-responsive">
     <table class="table borderless table-dark">
         <thead>
             <tr>
+                <th scope='col'></th>
                 <th scope="col">Title</th>
                 <th scope="col">Artist</th>
                 <th scope="col">Album</th>
@@ -12,6 +23,7 @@
         <tbody>
             {% for track in tracks %}
             <tr>
+                <td><img src="{{ track['album']['images'][0]['url'] }}" alt="" width="45" height="45"></td>
                 <td><a href="{{ url_for('track', id=track['id']) }}">{{ track["name"] }}</a></td>
                 <td>{{ track["artists"][0]["name"] }}</td>
                 <td>{{ track["album"]["name"] }}</td>

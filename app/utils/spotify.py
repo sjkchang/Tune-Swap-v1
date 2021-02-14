@@ -1,4 +1,5 @@
 import requests
+from requests import *
 import json
 from dotenv import load_dotenv
 import os
@@ -51,7 +52,7 @@ class Spotify(object):
                 )
             response.raise_for_status()
             result = response.json()
-        except requests.exception.HTTPError as http_error:
+        except requests.exceptions.HTTPError as http_error:
             response = http_error.response
             try:
                 message = response.json()["error"]["message"]
@@ -130,9 +131,17 @@ class Spotify(object):
     def get_current_user(self):
         return self._get("me")
 
+    def get_playlist(self, id):
+        playlist_id = self._get_id("playlist", id)
+        return self._get(f"playlists/{playlist_id}")
+
     def get_playlist_items(self, id):
         playlist_id = self._get_id("playlist", id)
         return self._get(f"playlists/{playlist_id}/tracks")
+
+    def get_playlist_image(self, id):
+        playlist_id = self._get_id("playlist", id)
+        return self._get(f"playlists/{playlist_id}/images")
 
     def get_current_user_playlists(self, limit=50, offset=0):
         return self._get(f"me/playlists", limit=limit, offset=offset)

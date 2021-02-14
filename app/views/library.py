@@ -34,7 +34,7 @@ def refresh_token_create_spotify():
 
         response = requests.post(URL, data=body_params)
 
-        session["access_token"] = response
+        session["access_token"] = response.json()
         session["access_token"]["refresh_token"] = session["refresh_token"]
         session["expires_at"] = datetime.now() + timedelta(hours=1)
 
@@ -47,7 +47,6 @@ def library():
     response = sp.get_current_user_playlists(limit=50)
     for item in response["items"]:
         playlists.append(item)
-
     return render_template("library.html", playlists=playlists)
 
 
@@ -55,13 +54,13 @@ def library():
 def playlist(id):
     sp = Spotify(session["access_token"])
 
+    playlist = sp.get_playlist(id)
+
     tracks = []
-    items = sp.get_playlist_items(id)["items"]
-    for item in items:
+    for item in playlist["tracks"]["items"]:
         tracks.append(item["track"])
 
-    # return str(tracks)
-    return render_template("playlist.html", tracks=tracks)
+    return render_template("playlist.html", tracks=tracks, playlist=playlist)
 
 
 @app.route("/user/library/track/<id>")
