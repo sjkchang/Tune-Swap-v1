@@ -39,11 +39,26 @@ class Spotify(object):
         headers["Content-Type"] = "application/json"
         if not url.startswith("http"):
             url = self.prefix_url + url
-        if http_method == "GET":
-            return requests.get(url, headers=headers, data=payload, params=params)
-        if http_method == "POST":
-            return requests.post(url, headers=headers, data=payload, params=params)
-        return None
+
+        try:
+            if http_method == "GET":
+                response = requests.get(
+                    url, headers=headers, data=payload, params=params
+                )
+            if http_method == "POST":
+                response = requests.post(
+                    url, headers=headers, data=payload, params=params
+                )
+            response.raise_for_status()
+            result = response.json()
+        except requests.exception.HTTPError as http_error:
+            response = http_error.response
+            try:
+                message = response.json()["error"]["message"]
+            except KeyError:
+                message = "ERROR"
+            raise Exception(message)
+        return result
 
     def _get(self, url, payload=None, **kwargs):
         return self._api_request("GET", url, payload, kwargs)

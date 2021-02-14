@@ -23,7 +23,7 @@ def home():
         sp = Spotify(access_token)
 
         me = sp.get_current_user()
-        me = me.json()
+        me = me
 
     return render_template("home.html", code=code, access_token=access_token, me=me)
 
@@ -32,5 +32,5 @@ def home():
 def account():
     sp = Spotify(session["access_token"])
 
-    current_user = sp.get_current_user().json()
+    current_user = sp.get_current_user()
     return render_template("account.html", current_user=current_user)

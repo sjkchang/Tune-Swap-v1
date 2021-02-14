@@ -32,7 +32,7 @@ def refresh_token_create_spotify():
             "client_secret": CLIENT_SECRET,
         }
 
-        response = requests.post(URL, data=body_params).json()
+        response = requests.post(URL, data=body_params)
 
         session["access_token"] = response
         session["access_token"]["refresh_token"] = session["refresh_token"]
@@ -44,7 +44,7 @@ def library():
     sp = Spotify(session["access_token"])
 
     playlists = []
-    response = sp.get_current_user_playlists(limit=50).json()
+    response = sp.get_current_user_playlists(limit=50)
     for item in response["items"]:
         playlists.append(item)
 
@@ -56,7 +56,7 @@ def playlist(id):
     sp = Spotify(session["access_token"])
 
     tracks = []
-    items = sp.get_playlist_items(id).json()["items"]
+    items = sp.get_playlist_items(id)["items"]
     for item in items:
         tracks.append(item["track"])
 
@@ -68,21 +68,21 @@ def playlist(id):
 def track(id):
     sp = Spotify(session["access_token"])
 
-    track = sp.get_track(id).json()
+    track = sp.get_track(id)
     return track
 
 
 @app.route("/user/top/tracks/<term>")
 def top_tracks(term):
     sp = Spotify(session["access_token"])
-    tracks = sp.get_top_tracks(limit=50, time_range=term).json()["items"]
+    tracks = sp.get_top_tracks(limit=50, time_range=term)["items"]
     return render_template("playlist.html", tracks=tracks)
 
 
 @app.route("/user/top/artists/<term>")
 def top_artists(term):
     sp = Spotify(session["access_token"])
-    artists = sp.get_top_artists(limit=50, time_range=term).json()["items"]
+    artists = sp.get_top_artists(limit=50, time_range=term)["items"]
     return render_template("artists.html", artists=artists)
 
 
@@ -90,22 +90,22 @@ def top_artists(term):
 def create_playlist():
     sp = Spotify(session["access_token"])
     form = CreatePlaylistForm()
-    genres = sp.get_recommended_genres().json()["genres"]
+    genres = sp.get_recommended_genres()["genres"]
     form.genres.choices = genres
     if form.validate_on_submit():
         # Create New Playlist with User Input Data
         playlist_id = sp.create_playlist(
-            sp.get_current_user().json()["id"],
+            sp.get_current_user()["id"],
             form.name.data,
             description=form.description.data,
-        ).json()["id"]
+        )["id"]
 
         # Get track recommendations from seeds
-        artist_id = "0kIk8TSdVhoGiOuqlsvY2f"
-        track_id = "3oUuRNgyIuiqVTWLCChp3s"
+        artist_id = "7pXu47GoqSYRajmBCjxdD6"
+        track_id = "1SHA4IJyiyNobDOrQzFFXy"
         recommendations = sp.get_recommendations(
             artist_id, form.genres.data, track_id, limit=50
-        ).json()["tracks"]
+        )["tracks"]
 
         # Convert Recommendations into list of uris
         tracks = []
@@ -114,6 +114,6 @@ def create_playlist():
             tracks.append(uri)
 
         # Add tracks to the New Playlist
-        sp.add_track_to_playlist(playlist_id, tracks).json()
+        sp.add_track_to_playlist(playlist_id, tracks)
         return redirect(url_for("playlist", id=playlist_id))
     return render_template("create_playlist.html", form=form)
