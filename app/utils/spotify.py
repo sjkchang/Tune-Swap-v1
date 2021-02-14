@@ -58,6 +58,8 @@ class Spotify(object):
             except KeyError:
                 message = "ERROR"
             raise Exception(message)
+        except requests.exceptions.RetryError:
+            raise Exception("429 Error, Too many requests")
         return result
 
     def _get(self, url, payload=None, **kwargs):
