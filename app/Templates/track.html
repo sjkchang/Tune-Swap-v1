@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-12">
+    <p><img src="{{ track['album']['images'][0]['url'] }}" alt=""></p>
+    <p>Track Name: <a href="{{ track['external_urls']['spotify'] }}" target="_blank">{{ track['name'] }}</a></p>
+    <p>Album:
+        <a href="{{ track['album']['external_urls']['spotify'] }}" target="_blank">
+            {{ track['album']['name'] }}
+        </a>
+    </p>
+    <p>Artist:
+        <a href="{{ track['artists'][0]['external_urls']['spotify'] }}" target="_blank">
+            {{ track['artists'][0]['name'] }}
+        </a>
+    </p>
+    <p>Popularity: {{ track['popularity'] }}</p>
+</div>
+<div>
+    {{ features }}
+</div>
+{% endblock content %}

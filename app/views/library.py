@@ -68,7 +68,8 @@ def track(id):
     sp = Spotify(session["access_token"])
 
     track = sp.get_track(id)
-    return track
+    features = sp.get_track_audio_features(id)
+    return render_template("track.html", track=track, features=features)
 
 
 @app.route("/user/top/tracks/<term>")
