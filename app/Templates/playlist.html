@@ -18,6 +18,7 @@
                 <th scope="col">Title</th>
                 <th scope="col">Artist</th>
                 <th scope="col">Album</th>
+                <th scope="col">Set Seed Track</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,12 @@
                 <td><a href="{{ url_for('track', id=track['id']) }}">{{ track["name"] }}</a></td>
                 <td>{{ track["artists"][0]["name"] }}</td>
                 <td>{{ track["album"]["name"] }}</td>
+                <td>
+                    <form action="" method="post">
+                        <input type="submit" name="button" class="btn btn-outline-light" value="Set Seed Song">
+                        <input type="hidden" name="set_seed" value="{{track['id'] }} {{track['artists'][0]['id']}}">
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

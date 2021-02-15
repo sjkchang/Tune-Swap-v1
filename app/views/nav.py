@@ -16,6 +16,7 @@ def home():
     code = "N/a"
     access_token = "n/a"
     me = "n/a"
+    seed_song = "n/a"
     if session.get("code"):
         code = session["code"]
     if session.get("access_token"):
@@ -24,8 +25,12 @@ def home():
 
         me = sp.get_current_user()
         me = me
+    if session.get("seed_song"):
+        seed_song = session["seed_song"]
 
-    return render_template("home.html", code=code, access_token=access_token, me=me)
+    return render_template(
+        "home.html", code=code, access_token=access_token, me=me, seed_song=seed_song
+    )
 
 
 @app.route("/account")

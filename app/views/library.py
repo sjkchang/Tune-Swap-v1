@@ -11,6 +11,7 @@ from ..utils.spotify import Spotify
 
 from ..forms.create_playlist import CreatePlaylistForm
 
+
 load_dotenv()
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
@@ -50,17 +51,20 @@ def library():
     return render_template("library.html", playlists=playlists)
 
 
-@app.route("/user/library/playlist/<id>")
+@app.route("/user/library/playlist/<id>", methods=["POST", "GET"])
 def playlist(id):
-    sp = Spotify(session["access_token"])
+    if request.method == "POST":
+        session["seed_song"] = request.form["set_seed"]
+        return redirect(url_for("playlist", id=id))
+    elif request.method == "GET":
+        sp = Spotify(session["access_token"])
+        playlist = sp.get_playlist(id)
 
-    playlist = sp.get_playlist(id)
+        tracks = []
+        for item in playlist["tracks"]["items"]:
+            tracks.append(item["track"])
 
-    tracks = []
-    for item in playlist["tracks"]["items"]:
-        tracks.append(item["track"])
-
-    return render_template("playlist.html", tracks=tracks, playlist=playlist)
+        return render_template("playlist.html", tracks=tracks, playlist=playlist)
 
 
 @app.route("/user/library/track/<id>")
@@ -74,9 +78,12 @@ def track(id):
 
 @app.route("/user/top/tracks/<term>")
 def top_tracks(term):
-    sp = Spotify(session["access_token"])
-    tracks = sp.get_top_tracks(limit=50, time_range=term)["items"]
-    return render_template("playlist.html", tracks=tracks)
+    if request.method == "POST":
+        session["seed_song"] = request.form["set_seed"]
+    elif request.method == "GET":
+        sp = Spotify(session["access_token"])
+        tracks = sp.get_top_tracks(limit=50, time_range=term)["items"]
+        return render_template("playlist.html", tracks=tracks)
 
 
 @app.route("/user/top/artists/<term>")
@@ -102,9 +109,13 @@ def create_playlist():
 
         # Get track recommendations from seeds
         artist_id = "7pXu47GoqSYRajmBCjxdD6"
-        track_id = "1SHA4IJyiyNobDOrQzFFXy"
+        tracks = [
+            "0lGzOhIr6Fs5TaQfp7RDLj",
+            "471sXvN5C5vfMSBdKrGpo7",
+        ]
+
         recommendations = sp.get_recommendations(
-            artist_id, form.genres.data, track_id, limit=50
+            artist_id, form.genres.data, tracks, limit=50
         )["tracks"]
 
         # Convert Recommendations into list of uris
