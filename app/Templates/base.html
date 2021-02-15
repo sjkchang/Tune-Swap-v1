@@ -29,7 +29,7 @@
 
         <!-- Sidebar -->
         <div class="" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom">Spotify+</div>
+            <div class="sidebar-heading border-bottom">SpotiVibes</div>
             <div class="list-group list-group-flush">
                 <a href="{{ url_for('home') }}" class="list-group-item list-group-item-action">Dashboard</a>
                 <a href="{{ url_for('library') }}" class="list-group-item list-group-item-action">Playlists</a>
@@ -58,9 +58,9 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ url_for('authenticate') }}">Authenticate</a>
                                 <a class="dropdown-item" href="{{ url_for('refresh') }}">Refresh</a>
-                                <a class="dropdown-item" href="#">Logout</a>
+                                <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Unlink From Spotify</a>
+                                <a class="dropdown-item" href="{{ url_for('unlink') }}">Unlink From Spotify</a>
                             </div>
                         </li>
                     </ul>

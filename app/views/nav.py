@@ -1,17 +1,21 @@
 from flask import current_app as app
-from flask import render_template, session
+from flask import render_template, session, request, redirect
+from flask.helpers import url_for
 
 from ..utils.spotify import Spotify
 import json
 import requests
 
 
-@app.route("/landing")
+@app.route("/", methods=["GET", "POST"])
 def landing():
-    return render_template("landing.html")
+    if request.method == "POST":
+        return redirect(url_for("authenticate"))
+    else:
+        return render_template("landing.html")
 
 
-@app.route("/")
+@app.route("/home")
 def home():
     code = "N/a"
     access_token = "n/a"

@@ -1,12 +1,12 @@
 from flask import current_app as app
-from flask import redirect, request, url_for, session
+from flask import redirect, request, url_for, session, g, render_template
 
 import os
 import requests
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
-from ..utils import spotify
+from ..utils.spotify import Spotify
 
 
 load_dotenv()
@@ -66,7 +66,6 @@ def refresh():
 
     response = requests.post(URL, data=body_params)
     response = response.json()
-    print(response)
 
     session["access_token"] = response
     session["access_token"]["refresh_token"] = session["refresh_token"]
@@ -74,5 +73,44 @@ def refresh():
     return redirect(url_for("home"))
 
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("landing"))
+
+
+@app.route("/unlink")
+def unlink():
+    session.clear()
+    return render_template("unlink_account.html")
+
+
 ### API Calls
 ########################################################################
+@app.before_request
+def refresh_token_create_spotify():
+    refresh_expired_token()
+    setup_spotify_obj()
+
+
+def refresh_expired_token():
+    if session.get("refresh_token") and (session["expires_at"] <= datetime.now()):
+        URL = "https://accounts.spotify.com/api/token"
+
+        body_params = {
+            "grant_type": "refresh_token",
+            "refresh_token": session["refresh_token"],
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+        }
+
+        response = requests.post(URL, data=body_params)
+
+        session["access_token"] = response.json()
+        session["access_token"]["refresh_token"] = session["refresh_token"]
+        session["expires_at"] = datetime.now() + timedelta(hours=1)
+
+
+def setup_spotify_obj():
+    if session.get("access_token"):
+        g.spotify = Spotify(session["access_token"])

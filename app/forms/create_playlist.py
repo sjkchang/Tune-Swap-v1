@@ -19,6 +19,4 @@ class CreatePlaylistForm(FlaskForm):
     private = BooleanField("Private")
     collaborative = BooleanField("Collaborative")
     genres = SelectField("genres", choices=[])
-    track = StringField("track", validators=[DataRequired()])
-    artist = StringField("artist", validators=[DataRequired()])
     submit = SubmitField("Submit")
