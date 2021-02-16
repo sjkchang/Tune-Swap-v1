@@ -33,51 +33,155 @@
             </div>
         </fieldset>
         <fieldset class="form-group">
-            <div class="form-group">
-                <div class="form-row">
-                    {{ form.danceability.label }}:
-                    {{ form.danceability(min=-0.025, max=1, step="0.025",
-                    oninput="outputUpdate(value, '#selected-danceability')") }}
-                    <output for="danceability" id="selected-danceability">{{ form.danceability.data }}</output>
-                </div>
-                <div class="form-row">
-                    {{ form.valence.label }}:
-                    {{ form.valence(min=-0.025, max=1, step="0.025",
-                    oninput="outputUpdate(value, '#selected-valence')") }}
-                    <output for="valence" id="selected-valence">{{ form.valence.data }}</output>
-                </div>
-                <div class="form-row">
-                    {{ form.acousticness.label }}:
-                    {{ form.acousticness(min=-0.025, max=1, step="0.025",
-                    oninput="outputUpdate(value, '#selected-acousticness')") }}
-                    <output for="acousticness" id="selected-acousticness">{{ form.acousticness.data }}</output>
-                </div>
-                <div class="form-row">
-                    {{ form.instrumentalness.label }}:
-                    {{ form.instrumentalness(min=-0.025, max=1, step="0.025",
-                    oninput="outputUpdate(value, '#selected-instrumentalness')") }}
-                    <output for="instrumentalness" id="selected-instrumentalness">{{ form.instrumentalness.data
-                        }}</output>
-                </div>
-                <div class="form-row">
-                    {{ form.liveness.label }}:
-                    {{ form.liveness(min=-0.025, max=1, step="0.025",
-                    oninput="outputUpdate(value, '#selected-liveness')") }}
-                    <output for="liveness" id="selected-liveness">{{ form.liveness.data }}</output>
-                </div>
-                <div class="form-row">
-                    {{ form.energy.label }}:
-                    {{ form.energy(min=-0.025, max=1, step="0.025",
-                    oninput="outputUpdate(value, '#selected-energy')") }}
-                    <output for="energy" id="selected-energy">{{ form.energy.data }}</output>
-                </div>
-                <div class="form-row">
-                    {{ form.speechiness.label }}:
-                    {{ form.speechiness(min=-0.025, max=1, step="0.025",
-                    oninput="outputUpdate(value, '#selected-speechiness')") }}
-                    <output for="speechiness" id="selected-speechiness">{{ form.speechiness.data }}</output>
-                </div>
-            </div>
+            <table class="table borderless table-dark fixed">
+                <thead>
+                    <tr>
+                        <th scope="col">Use Advanced Generation: {{ form.advanced }}</th>
+                        <th scope="col">min</th>
+                        <th scope="col">target</th>
+                        <th scope="col">max</th>
+                    </tr>
+                </thead>
+                <tbody class="fixed">
+                    <tr class="fixed">
+                        <td>{{ form.danceability.label }}:</td>
+                        <td>
+                            {{ form.min_danceability(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-min-danceability')") }}
+                            <output for="min-danceability" id="selected-min-danceability">{{ form.min_danceability.data
+                                }}</output>
+                        </td>
+                        <td>
+                            {{ form.danceability(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-danceability')") }}
+                            <output for="danceability" id="selected-danceability">{{ form.danceability.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.max_danceability(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-max-danceability')") }}
+                            <output for="max-danceability" id="selected-max-danceability">{{ form.max_danceability.data
+                                }}</output>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.valence.label }}:</td>
+                        <td>
+                            {{ form.min_valence(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-min-valence')") }}
+                            <output for="min-valence" id="selected-min-valence">{{ form.min_valence.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.valence(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-valence')") }}
+                            <output for="valence" id="selected-valence">{{ form.valence.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.max_valence(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-max-valence')") }}
+                            <output for="max-valence" id="selected-max-valence">{{ form.max_valence.data }}</output>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.acousticness.label }}:</td>
+                        <td>
+                            {{ form.min_acousticness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-min-acousticness')") }}
+                            <output for="min-acousticness" id="selected-min-acousticness">{{ form.min_acousticness.data
+                                }}</output>
+                        </td>
+                        <td>
+                            {{ form.acousticness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-acousticness')") }}
+                            <output for="acousticness" id="selected-acousticness">{{ form.acousticness.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.max_acousticness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-max-acousticness')") }}
+                            <output for="max-acousticness" id="selected-max-acousticness">{{ form.max_acousticness.data
+                                }}</output>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.instrumentalness.label }}:</td>
+                        <td>
+                            {{ form.min_instrumentalness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-min-instrumentalness')") }}
+                            <output for="min-instrumentalness" id="selected-min-instrumentalness">{{
+                                form.min_instrumentalness.data
+                                }}</output>
+                        </td>
+                        <td>
+                            {{ form.instrumentalness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-instrumentalness')") }}
+                            <output for="instrumentalness" id="selected-instrumentalness">{{ form.instrumentalness.data
+                                }}</output>
+                        </td>
+                        <td>
+                            {{ form.max_instrumentalness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-max-instrumentalness')") }}
+                            <output for="max-instrumentalness" id="selected-max-instrumentalness">{{
+                                form.max_instrumentalness.data
+                                }}</output>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.liveness.label }}:</td>
+                        <td>
+                            {{ form.min_liveness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-min-liveness')") }}
+                            <output for="min-liveness" id="selected-min-liveness">{{ form.min_liveness.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.liveness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-liveness')") }}
+                            <output for="liveness" id="selected-liveness">{{ form.liveness.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.max_liveness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-max-liveness')") }}
+                            <output for="max-liveness" id="selected-max-liveness">{{ form.max_liveness.data }}</output>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.energy.label }}:</td>
+                        <td>
+                            {{ form.min_energy(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-min-energy')") }}
+                            <output for="min-energy" id="selected-min-energy">{{ form.min_energy.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.energy(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-energy')") }}
+                            <output for="energy" id="selected-energy">{{ form.energy.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.max_energy(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-max-energy')") }}
+                            <output for="max-energy" id="selected-max-energy">{{ form.max_energy.data }}</output>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.speechiness.label }}:</td>
+                        <td>
+                            {{ form.min_speechiness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-min-speechiness')") }}
+                            <output for="min-speechiness" id="selected-min-speechiness">{{ form.min_speechiness.data
+                                }}</output>
+                        </td>
+                        <td>
+                            {{ form.speechiness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-speechiness')") }}
+                            <output for="speechiness" id="selected-speechiness">{{ form.speechiness.data }}</output>
+                        </td>
+                        <td>
+                            {{ form.max_speechiness(min=-0.05, max=1, step="0.05",
+                            oninput="outputUpdate(value, '#selected-max-speechiness')") }}
+                            <output for="max-speechiness" id="selected-max-speechiness">{{ form.max_speechiness.data
+                                }}</output>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </fieldset>
         {{ form.submit(class="btn btn-outline-dark") }}
     </form>

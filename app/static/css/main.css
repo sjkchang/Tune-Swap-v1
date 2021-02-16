@@ -19,6 +19,8 @@ a:hover{
 .table{
     background-color: rgba(0, 0, 0, 0);
     color:#66fcf1;
+    width: 100%;
+    table-layout: fixed;
 
 }
 
