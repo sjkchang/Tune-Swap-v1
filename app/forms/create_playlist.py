@@ -19,4 +19,13 @@ class CreatePlaylistForm(FlaskForm):
     private = BooleanField("Private")
     collaborative = BooleanField("Collaborative")
     genres = SelectField("genres", choices=[])
+    danceability = DecimalRangeField("Danceability", default=0)
+    valence = DecimalRangeField("Valence", default=0)
+    acousticness = DecimalRangeField("Acousticness", default=0)
+    instrumentalness = DecimalRangeField("Instrumentalness", default=0)
+    liveness = DecimalRangeField("Valence", default=0)
+    energy = DecimalRangeField("Energy", default=0)
+    speechiness = DecimalRangeField("Speechiness", default=0)
+    loudness = DecimalRangeField("Loudness", default=-60)
+
     submit = SubmitField("Submit")

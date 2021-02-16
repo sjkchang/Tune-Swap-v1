@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
+<script>
+    function outputUpdate(value, id) {
+        if (value < 0) {
+            document.querySelector(id).value = "Any";
+        } else {
+            document.querySelector(id).value = value;
+        }
+    }
+</script>
 <div class="col-md-12">
     <legend class="border-bottom mb-4 text-navy">Generate Playlist</legend>
     <div>
@@ -21,6 +30,53 @@
             </div>
             <div>
                 {{ genres }}
+            </div>
+        </fieldset>
+        <fieldset class="form-group">
+            <div class="form-group">
+                <div class="form-row">
+                    {{ form.danceability.label }}:
+                    {{ form.danceability(min=-0.025, max=1, step="0.025",
+                    oninput="outputUpdate(value, '#selected-danceability')") }}
+                    <output for="danceability" id="selected-danceability">{{ form.danceability.data }}</output>
+                </div>
+                <div class="form-row">
+                    {{ form.valence.label }}:
+                    {{ form.valence(min=-0.025, max=1, step="0.025",
+                    oninput="outputUpdate(value, '#selected-valence')") }}
+                    <output for="valence" id="selected-valence">{{ form.valence.data }}</output>
+                </div>
+                <div class="form-row">
+                    {{ form.acousticness.label }}:
+                    {{ form.acousticness(min=-0.025, max=1, step="0.025",
+                    oninput="outputUpdate(value, '#selected-acousticness')") }}
+                    <output for="acousticness" id="selected-acousticness">{{ form.acousticness.data }}</output>
+                </div>
+                <div class="form-row">
+                    {{ form.instrumentalness.label }}:
+                    {{ form.instrumentalness(min=-0.025, max=1, step="0.025",
+                    oninput="outputUpdate(value, '#selected-instrumentalness')") }}
+                    <output for="instrumentalness" id="selected-instrumentalness">{{ form.instrumentalness.data
+                        }}</output>
+                </div>
+                <div class="form-row">
+                    {{ form.liveness.label }}:
+                    {{ form.liveness(min=-0.025, max=1, step="0.025",
+                    oninput="outputUpdate(value, '#selected-liveness')") }}
+                    <output for="liveness" id="selected-liveness">{{ form.liveness.data }}</output>
+                </div>
+                <div class="form-row">
+                    {{ form.energy.label }}:
+                    {{ form.energy(min=-0.025, max=1, step="0.025",
+                    oninput="outputUpdate(value, '#selected-energy')") }}
+                    <output for="energy" id="selected-energy">{{ form.energy.data }}</output>
+                </div>
+                <div class="form-row">
+                    {{ form.speechiness.label }}:
+                    {{ form.speechiness(min=-0.025, max=1, step="0.025",
+                    oninput="outputUpdate(value, '#selected-speechiness')") }}
+                    <output for="speechiness" id="selected-speechiness">{{ form.speechiness.data }}</output>
+                </div>
             </div>
         </fieldset>
         {{ form.submit(class="btn btn-outline-dark") }}

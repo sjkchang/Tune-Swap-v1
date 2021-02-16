@@ -74,7 +74,7 @@ def top_artists(term):
 @app.route("/user/create-playlist", methods=["GET", "POST"])
 def create_playlist():
     sp = Spotify(session["access_token"])
-    form = CreatePlaylistForm()
+    form = CreatePlaylistForm(meta={"csrf": False})
     genres = sp.get_recommended_genres()["genres"]
     form.genres.choices = genres
     seed_song = "You haven't set your seed song, go to a playlist or top tracks to select a seed song"
