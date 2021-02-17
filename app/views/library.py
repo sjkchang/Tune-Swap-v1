@@ -73,31 +73,67 @@ def top_artists(term):
 
 @app.route("/user/create-playlist", methods=["GET", "POST"])
 def create_playlist():
-    sp = Spotify(session["access_token"])
     form = CreatePlaylistForm(meta={"csrf": False})
-    genres = sp.get_recommended_genres()["genres"]
+    genres = g.spotify.get_recommended_genres()["genres"]
     form.genres.choices = genres
-    seed_song = "You haven't set your seed song, go to a playlist or top tracks to select a seed song"
-    if session.get(seed_song):
-        seed_song = session["seed_song"]
-        track = seed_song[0]
-        artist = seed_song[1]
-    if form.validate_on_submit():
-        # Create New Playlist with User Input Data
-        if session.get("seed_song"):
-            playlist_id = sp.create_playlist(
-                sp.get_current_user()["id"],
-                form.name.data,
-                description=form.description.data,
-            )["id"]
 
-            # Get track recommendations from seeds
-            seed = session["seed_song"].split()
-            track_id = seed[0]
-            artist_id = seed[1]
+    if session.get("seed_song"):
+        seed_song = session["seed_song"].split(" ")
+        track_id = seed_song[0]
+        artist_id = seed_song[1]
+        if form.validate_on_submit():
+            num_tracks = form.num_tracks.data
+            kwargs = {"limit": num_tracks}
+            if form.advanced.data == True:
+                # If both the column and row of the slider is active add the sliders value to kwargs
+                if form.use_min.data == True:
+                    if form.use_acousticness.data:
+                        kwargs["min_acousticness"] = form.min_acousticness.data
+                    if form.use_danceability.data:
+                        kwargs["min_danceability"] = form.min_danceability.data
+                    if form.use_liveness.data:
+                        kwargs["min_liveness"] = form.min_liveness.data
+                    if form.use_energy.data:
+                        kwargs["min_energy"] = form.min_energy.data
+                    if form.use_instrumentalness.data:
+                        kwargs["min_instrumentalness"] = form.min_instrumentalness.data
+                    if form.use_valence.data:
+                        kwargs["min_valence"] = form.min_valence.data
+                    if form.use_speechiness.data:
+                        kwargs["min_speechiness"] = form.min_speechiness.data
+                if form.use_max.data == True:
+                    if form.use_acousticness.data:
+                        kwargs["max_acousticness"] = form.max_acousticness.data
+                    if form.use_danceability.data:
+                        kwargs["max_danceability"] = form.max_danceability.data
+                    if form.use_liveness.data:
+                        kwargs["max_liveness"] = form.max_liveness.data
+                    if form.use_energy.data:
+                        kwargs["max_energy"] = form.max_energy.data
+                    if form.use_instrumentalness:
+                        kwargs["max_instrumentalness"] = form.max_instrumentalness.data
+                    if form.use_valence.data:
+                        kwargs["max_valence"] = form.max_valence.data
+                    if form.use_speechiness.data:
+                        kwargs["max_speechiness"] = form.max_speechiness.data
+                if form.use_target.data == True:
+                    if form.use_acousticness.data:
+                        kwargs["target_acousticness"] = form.acousticness.data
+                    if form.use_danceability.data:
+                        kwargs["target_danceability"] = form.danceability.data
+                    if form.use_liveness.data:
+                        kwargs["target_liveness"] = form.liveness.data
+                    if form.use_energy.data:
+                        kwargs["target_energy"] = form.energy.data
+                    if form.use_instrumentalness:
+                        kwargs["target_instrumentalness"] = form.instrumentalness.data
+                    if form.use_valence.data:
+                        kwargs["target_valence"] = form.valence.data
+                    if form.use_speechiness.data:
+                        kwargs["target_speechiness"] = form.speechiness.data
 
-            recommendations = sp.get_recommendations(
-                artist_id, form.genres.data, track_id, limit=50
+            recommendations = g.spotify.get_recommendations(
+                artist_id, form.genres.data, track_id, **kwargs
             )["tracks"]
 
             # Convert Recommendations into list of uris
@@ -106,9 +142,14 @@ def create_playlist():
                 uri = track["uri"]
                 tracks.append(uri)
 
-            # Add tracks to the New Playlist
-            sp.add_track_to_playlist(playlist_id, tracks)
+            # Create New Playlist with User Input Data
+            playlist_id = g.spotify.create_playlist(
+                g.spotify.get_current_user()["id"],
+                form.name.data,
+                description=form.description.data,
+            )["id"]
+            g.spotify.add_track_to_playlist(playlist_id, tracks)
             return redirect(url_for("playlist", id=playlist_id))
-        else:
-            return redirect(url_for("library"))
+    else:
+        return "No Seed Song"
     return render_template("create_playlist.html", form=form)
