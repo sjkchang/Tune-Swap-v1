@@ -21,10 +21,14 @@ BASE_URL = "https://accounts.spotify.com/authorize"
 
 @app.route("/user/library")
 def library():
+    total_playlists = g.spotify.get_current_user_playlists()["total"]
+    offset = 0
     playlists = []
-    response = g.spotify.get_current_user_playlists(limit=50)
-    for item in response["items"]:
-        playlists.append(item)
+    while len(playlists) < total_playlists:
+        items = g.spotify.get_current_user_playlists(offset=offset, limit=50)
+        for item in items["items"]:
+            playlists.append(item)
+        offset = offset + 50
     return render_template("library.html", playlists=playlists)
 
 
@@ -34,13 +38,15 @@ def playlist(id):
         session["seed_song"] = request.form["set_seed"]
         return redirect(url_for("playlist", id=id))
     elif request.method == "GET":
-        sp = Spotify(session["access_token"])
-        playlist = sp.get_playlist(id)
-
+        playlist = g.spotify.get_playlist(id)
+        total_tracks = playlist["tracks"]["total"]
+        offset = 0
         tracks = []
-        for item in playlist["tracks"]["items"]:
-            tracks.append(item["track"])
-
+        while len(tracks) < total_tracks:
+            items = g.spotify.get_playlist_items(id, offset=offset, limit=100)
+            for item in items["items"]:
+                tracks.append(item["track"])
+            offset = offset + 100
         return render_template("playlist.html", tracks=tracks, playlist=playlist)
 
 

@@ -139,9 +139,9 @@ class Spotify(object):
         playlist_id = self._get_id("playlist", id)
         return self._get(f"playlists/{playlist_id}")
 
-    def get_playlist_items(self, id):
+    def get_playlist_items(self, id, offset, limit):
         playlist_id = self._get_id("playlist", id)
-        return self._get(f"playlists/{playlist_id}/tracks")
+        return self._get(f"playlists/{playlist_id}/tracks", limit=limit, offset=offset)
 
     def get_playlist_image(self, id):
         playlist_id = self._get_id("playlist", id)
