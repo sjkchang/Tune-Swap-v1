@@ -2,11 +2,21 @@
 {% block content %}
 <script>
     function outputUpdate(value, id) {
-        if (value < 0) {
-            document.querySelector(id).value = "Any";
-        } else {
-            document.querySelector(id).value = value;
+        document.querySelector(id).value = value;
+    }
+    function toggle(source) {
+        checkboxes = document.getElementsByClassName('checkbox');
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+            console.log(checkboxes[i].checked)
         }
+    }
+    function toggleAdvanced() {
+        box = document.getElementById("advanced");
+        if (box.checked == false) {
+            box.checked = true;
+        }
+
     }
 </script>
 <div class="col-md-12">
@@ -31,153 +41,177 @@
             <div>
                 {{ genres }}
             </div>
+            <div class="form-row">
+                <div>
+                    Number of Tracks:
+                    {{ form.num_tracks(min=1, max=100, step="1",
+                    oninput="outputUpdate(value, '#selected-num_tracks')") }}
+                    <output for="num_tracks" id="selected-num_tracks">{{ form.num_tracks.data }}</output>
+                </div>
+            </div>
         </fieldset>
         <fieldset class="form-group">
             <table class="table borderless table-dark fixed">
                 <thead>
                     <tr>
-                        <th scope="col">Use Advanced Generation: {{ form.advanced }}</th>
-                        <th scope="col">min</th>
-                        <th scope="col">target</th>
-                        <th scope="col">max</th>
+                        <th scope="col">Use Advanced Generation: {{ form.advanced(onclick="toggle(this)", id="advanced")
+                            }}</th>
+                        <th scope="col">min {{ form.use_min(class="checkbox", onclick="toggleAdvanced()") }}</th>
+                        <th scope="col">target {{ form.use_target(class="checkbox", onclick="toggleAdvanced()") }}</th>
+                        <th scope="col">max {{ form.use_max(class="checkbox", onclick="toggleAdvanced()") }}</th>
+                        <th class="text-center" scope="col">Generate With</th>
                     </tr>
                 </thead>
                 <tbody class="fixed">
                     <tr class="fixed">
                         <td>{{ form.danceability.label }}:</td>
                         <td>
-                            {{ form.min_danceability(min=-0.05, max=1, step="0.05",
+                            {{ form.min_danceability(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-min-danceability')") }}
                             <output for="min-danceability" id="selected-min-danceability">{{ form.min_danceability.data
                                 }}</output>
                         </td>
                         <td>
-                            {{ form.danceability(min=-0.05, max=1, step="0.05",
+                            {{ form.danceability(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-danceability')") }}
                             <output for="danceability" id="selected-danceability">{{ form.danceability.data }}</output>
                         </td>
                         <td>
-                            {{ form.max_danceability(min=-0.05, max=1, step="0.05",
+                            {{ form.max_danceability(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-max-danceability')") }}
                             <output for="max-danceability" id="selected-max-danceability">{{ form.max_danceability.data
                                 }}</output>
                         </td>
+                        <td class="text-center">{{ form.use_danceability(class="checkbox", onclick="toggleAdvanced()")
+                            }} </td>
                     </tr>
                     <tr>
                         <td>{{ form.valence.label }}:</td>
                         <td>
-                            {{ form.min_valence(min=-0.05, max=1, step="0.05",
+                            {{ form.min_valence(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-min-valence')") }}
                             <output for="min-valence" id="selected-min-valence">{{ form.min_valence.data }}</output>
                         </td>
                         <td>
-                            {{ form.valence(min=-0.05, max=1, step="0.05",
+                            {{ form.valence(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-valence')") }}
                             <output for="valence" id="selected-valence">{{ form.valence.data }}</output>
                         </td>
                         <td>
-                            {{ form.max_valence(min=-0.05, max=1, step="0.05",
+                            {{ form.max_valence(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-max-valence')") }}
                             <output for="max-valence" id="selected-max-valence">{{ form.max_valence.data }}</output>
+                        </td>
+                        <td class="text-center">{{ form.use_valence(class="checkbox", onclick="toggleAdvanced()") }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ form.acousticness.label }}:</td>
                         <td>
-                            {{ form.min_acousticness(min=-0.05, max=1, step="0.05",
+                            {{ form.min_acousticness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-min-acousticness')") }}
                             <output for="min-acousticness" id="selected-min-acousticness">{{ form.min_acousticness.data
                                 }}</output>
                         </td>
                         <td>
-                            {{ form.acousticness(min=-0.05, max=1, step="0.05",
+                            {{ form.acousticness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-acousticness')") }}
                             <output for="acousticness" id="selected-acousticness">{{ form.acousticness.data }}</output>
                         </td>
                         <td>
-                            {{ form.max_acousticness(min=-0.05, max=1, step="0.05",
+                            {{ form.max_acousticness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-max-acousticness')") }}
                             <output for="max-acousticness" id="selected-max-acousticness">{{ form.max_acousticness.data
                                 }}</output>
                         </td>
+                        <td class="text-center">{{ form.use_acousticness(class="checkbox", onclick="toggleAdvanced()")
+                            }} </td>
                     </tr>
                     <tr>
                         <td>{{ form.instrumentalness.label }}:</td>
                         <td>
-                            {{ form.min_instrumentalness(min=-0.05, max=1, step="0.05",
+                            {{ form.min_instrumentalness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-min-instrumentalness')") }}
                             <output for="min-instrumentalness" id="selected-min-instrumentalness">{{
                                 form.min_instrumentalness.data
                                 }}</output>
                         </td>
                         <td>
-                            {{ form.instrumentalness(min=-0.05, max=1, step="0.05",
+                            {{ form.instrumentalness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-instrumentalness')") }}
                             <output for="instrumentalness" id="selected-instrumentalness">{{ form.instrumentalness.data
                                 }}</output>
                         </td>
                         <td>
-                            {{ form.max_instrumentalness(min=-0.05, max=1, step="0.05",
+                            {{ form.max_instrumentalness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-max-instrumentalness')") }}
                             <output for="max-instrumentalness" id="selected-max-instrumentalness">{{
                                 form.max_instrumentalness.data
                                 }}</output>
                         </td>
+                        <td class="text-center">{{ form.use_instrumentalness(class="checkbox",
+                            onclick="toggleAdvanced()") }} </td>
                     </tr>
                     <tr>
                         <td>{{ form.liveness.label }}:</td>
                         <td>
-                            {{ form.min_liveness(min=-0.05, max=1, step="0.05",
+                            {{ form.min_liveness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-min-liveness')") }}
                             <output for="min-liveness" id="selected-min-liveness">{{ form.min_liveness.data }}</output>
                         </td>
                         <td>
-                            {{ form.liveness(min=-0.05, max=1, step="0.05",
+                            {{ form.liveness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-liveness')") }}
                             <output for="liveness" id="selected-liveness">{{ form.liveness.data }}</output>
                         </td>
                         <td>
-                            {{ form.max_liveness(min=-0.05, max=1, step="0.05",
+                            {{ form.max_liveness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-max-liveness')") }}
                             <output for="max-liveness" id="selected-max-liveness">{{ form.max_liveness.data }}</output>
+                        </td>
+                        <td class="text-center">{{ form.use_liveness(class="checkbox", onclick="toggleAdvanced()") }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ form.energy.label }}:</td>
                         <td>
-                            {{ form.min_energy(min=-0.05, max=1, step="0.05",
+                            {{ form.min_energy(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-min-energy')") }}
                             <output for="min-energy" id="selected-min-energy">{{ form.min_energy.data }}</output>
                         </td>
                         <td>
-                            {{ form.energy(min=-0.05, max=1, step="0.05",
+                            {{ form.energy(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-energy')") }}
                             <output for="energy" id="selected-energy">{{ form.energy.data }}</output>
                         </td>
                         <td>
-                            {{ form.max_energy(min=-0.05, max=1, step="0.05",
+                            {{ form.max_energy(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-max-energy')") }}
                             <output for="max-energy" id="selected-max-energy">{{ form.max_energy.data }}</output>
+                        </td>
+                        <td class="text-center">{{ form.use_energy(class="checkbox", onclick="toggleAdvanced()") }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ form.speechiness.label }}:</td>
                         <td>
-                            {{ form.min_speechiness(min=-0.05, max=1, step="0.05",
+                            {{ form.min_speechiness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-min-speechiness')") }}
                             <output for="min-speechiness" id="selected-min-speechiness">{{ form.min_speechiness.data
                                 }}</output>
                         </td>
                         <td>
-                            {{ form.speechiness(min=-0.05, max=1, step="0.05",
+                            {{ form.speechiness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-speechiness')") }}
                             <output for="speechiness" id="selected-speechiness">{{ form.speechiness.data }}</output>
                         </td>
                         <td>
-                            {{ form.max_speechiness(min=-0.05, max=1, step="0.05",
+                            {{ form.max_speechiness(min=0, max=1, step="0.05",
                             oninput="outputUpdate(value, '#selected-max-speechiness')") }}
                             <output for="max-speechiness" id="selected-max-speechiness">{{ form.max_speechiness.data
                                 }}</output>
+                        </td>
+                        <td class="text-center">{{ form.use_speechiness(class="checkbox", onclick="toggleAdvanced()") }}
                         </td>
                     </tr>
                 </tbody>
