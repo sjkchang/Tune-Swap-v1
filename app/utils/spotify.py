@@ -184,27 +184,13 @@ class Spotify(object):
             limit=2,
         )
 
-    def get_recommendations(
-        self,
-        seed_artist,
-        seed_genres,
-        seed_tracks,
-        limit=50,
-        min_popularity=None,
-        max_popularity=None,
-        min_tempo=None,
-        max_tempo=None,
-        target_tempo=None,
-        min_valence=None,
-        max_valence=None,
-        target_valence=None,
-    ):
+    def get_recommendations(self, seed_artist, seed_genres, seed_tracks, **kwargs):
         return self._get(
             "recommendations",
             seed_artist=seed_artist,
             seed_genres=seed_genres,
             seed_tracks=seed_tracks,
-            limit=limit,
+            **kwargs,
         )
 
     def get_artist_id(self, artist):
