@@ -23,6 +23,7 @@
         </thead>
         <tbody>
             {% for track in tracks %}
+            {% if track['album']['images'][0] %}
             <tr>
                 <td><a href="{{ track['external_urls']['spotify'] }}" target="_blank"><img
                             src="{{ track['album']['images'][0]['url'] }}" alt="" width="45" height="45"></a></td>
@@ -36,6 +37,7 @@
                     </form>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>

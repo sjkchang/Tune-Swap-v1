@@ -1,5 +1,5 @@
 from flask import current_app as app
-from flask import redirect, request, url_for, render_template, session, g
+from flask import redirect, request, url_for, render_template, session, g, flash
 
 import os
 from datetime import datetime, timedelta
@@ -23,11 +23,14 @@ BASE_URL = "https://accounts.spotify.com/authorize"
 def library():
     total_playlists = g.spotify.get_current_user_playlists()["total"]
     offset = 0
+    i = 0
     playlists = []
-    while len(playlists) < total_playlists:
+    while offset < total_playlists:
         items = g.spotify.get_current_user_playlists(offset=offset, limit=50)
         for item in items["items"]:
-            playlists.append(item)
+            # No image for playlist. Typically means its empty
+            if len(item["images"]) > 0:
+                playlists.append(item)
         offset = offset + 50
     return render_template("library.html", playlists=playlists)
 
@@ -42,10 +45,12 @@ def playlist(id):
         total_tracks = playlist["tracks"]["total"]
         offset = 0
         tracks = []
-        while len(tracks) < total_tracks:
+        while offset < total_tracks:
             items = g.spotify.get_playlist_items(id, offset=offset, limit=100)
             for item in items["items"]:
-                tracks.append(item["track"])
+                # No image for a song. Typically means its empty
+                if len(item["track"]["album"]["images"]) > 0:
+                    tracks.append(item["track"])
             offset = offset + 100
         return render_template("playlist.html", tracks=tracks, playlist=playlist)
 
@@ -157,5 +162,6 @@ def create_playlist():
             g.spotify.add_track_to_playlist(playlist_id, tracks)
             return redirect(url_for("playlist", id=playlist_id))
     else:
-        return "No Seed Song"
+        flash("No seed song selected", "danger")
+        return redirect(url_for("library"))
     return render_template("create_playlist.html", form=form)
