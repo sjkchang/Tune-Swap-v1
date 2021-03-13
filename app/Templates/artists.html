@@ -12,7 +12,7 @@
         <tbody>
             {% for artist in artists %}
             <tr>
-                <td><a href="#">{{ artist["name"] }}</a></td>
+                <td><a href="{{ artist['external_urls']['spotify'] }}">{{ artist["name"] }}</a></td>
                 <td>{{ artist["followers"]["total"] }}</td>
                 <td>{{ artist["popularity"] }}</td>
             </tr>

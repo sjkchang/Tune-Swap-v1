@@ -121,6 +121,10 @@ class Spotify(object):
         track_id = self._get_id("track", id)
         return self._get(f"tracks/{track_id}")
 
+    def get_artist(self, id):
+        artist_id = self._get_id("artist", id)
+        return self._get(f"artists/{artist_id}")
+
     def get_track_audio_features(self, id):
         track_id = self._get_id("track", id)
         return self._get(f"audio-features/{track_id}")

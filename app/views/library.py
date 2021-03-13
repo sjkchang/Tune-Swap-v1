@@ -55,7 +55,7 @@ def playlist(id):
         return render_template("playlist.html", tracks=tracks, playlist=playlist)
 
 
-@app.route("/user/library/track/<id>")
+@app.route("/track/<id>")
 def track(id):
     sp = Spotify(session["access_token"])
 
